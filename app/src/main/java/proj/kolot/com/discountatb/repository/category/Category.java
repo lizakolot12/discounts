@@ -5,7 +5,7 @@ public enum Category {
     KITCHEN(1, "Для кухни"),
     CLOTHES(2, "Одежда"),
     CHILDREN(3, "Детские товары"),
-    HOUSEHOLD(4, "Хозяйственые товары");
+    HOUSEHOLD(4, "Хозяйственные товары");
 
     private int value;
 
