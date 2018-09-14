@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">DiscountATB</string>
+    <string name="app_title">Акции</string>
+    <string name="action_update">Update</string>
+    <string name="money">грн.</string>
+    <string name="percent">%</string>
+
+
+</resources>
