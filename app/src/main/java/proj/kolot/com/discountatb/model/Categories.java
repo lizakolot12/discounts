@@ -6,8 +6,6 @@ import java.util.List;
 import proj.kolot.com.discountatb.repository.retrofit.Category;
 
 public class Categories {
-
-
     private List<ProductCategory> values = new ArrayList<>();
 
     public Categories() {

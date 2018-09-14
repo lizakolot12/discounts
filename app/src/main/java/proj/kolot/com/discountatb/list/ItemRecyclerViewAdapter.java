@@ -69,11 +69,11 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView name;
-        public final TextView description;
-        public final TextView price;
-        public final TextView discount;
-        public final ImageView image;
+        final TextView name;
+        final TextView description;
+        final TextView price;
+        final TextView discount;
+        final ImageView image;
 
         ViewHolder(View view) {
             super(view);

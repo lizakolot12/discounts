@@ -1,8 +1,5 @@
 package proj.kolot.com.discountatb.repository.retrofit;
 
-/**
- * Created by Kolot Liza on 9/11/18.
- */
 public enum Category {
     ALL(0, "Все товары"),
     KITCHEN(1, "Для кухни"),

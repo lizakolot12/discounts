@@ -3,6 +3,7 @@ package proj.kolot.com.discountatb;
 import android.app.Application;
 
 import proj.kolot.com.discountatb.repository.GeneralRepository;
+import proj.kolot.com.discountatb.repository.RepositoryFactory;
 import proj.kolot.com.discountatb.repository.retrofit.ProductApi;
 import proj.kolot.com.discountatb.repository.retrofit.RetrofitClientInstance;
 
@@ -18,7 +19,7 @@ public class App extends Application {
         super.onCreate();
         instance = this;
         productApi = RetrofitClientInstance.getRetrofitInstance().create(ProductApi.class);
-        repository = new GeneralRepository();
+        repository = new GeneralRepository(RepositoryFactory.getLocalRepository(), RepositoryFactory.getRemoteRepository());
     }
 
     public ProductApi getProductApi() {

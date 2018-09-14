@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClientInstance {
 
     private static Retrofit retrofit;
-    private static final String BASE_URL = "http://www.atbmarket.com";
+    private static final String BASE_URL = "here must be url";
 
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {

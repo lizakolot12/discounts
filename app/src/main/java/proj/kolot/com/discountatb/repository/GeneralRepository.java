@@ -12,8 +12,14 @@ import proj.kolot.com.discountatb.model.ProductCategory;
 
 public class GeneralRepository implements Repository {
     private static final String TAG = GeneralRepository.class.getName();
-    private Repository localRepository = RepositoryFactory.getLocalRepository();
-    private Repository remoteRepository = RepositoryFactory.getRemoteRepository();
+
+    private Repository localRepository;
+    private Repository remoteRepository;
+
+    public GeneralRepository(Repository localRepository, Repository remoteRepository) {
+        this.localRepository = localRepository;
+        this.remoteRepository = remoteRepository;
+    }
 
     private Map<ProductCategory, List<Product>> cache = new HashMap<>();
 

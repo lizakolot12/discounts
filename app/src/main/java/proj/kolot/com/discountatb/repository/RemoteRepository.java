@@ -17,9 +17,6 @@ import proj.kolot.com.discountatb.model.Result;
 
 public class RemoteRepository implements Repository {
 
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
-
-
     @Override
     public void getProductByCategory(final ProductCategory category, final LoadDataCallback callback) {
         Observable<Result> disposable;
@@ -28,6 +25,7 @@ public class RemoteRepository implements Repository {
         } else {
             disposable = App.getInstance().getProductApi().getAllProductsByCategory(category.getValue());
         }
+        CompositeDisposable compositeDisposable = new CompositeDisposable();
         compositeDisposable.add(disposable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -24,7 +24,7 @@ import proj.kolot.com.discountatb.model.ProductCategory;
 
 public class ProductListActivity extends AppCompatActivity {
 
-    private static final String EXTRA_CATEGORY_CHOSEN = "extra_category_choosed_id";
+    private static final String EXTRA_CATEGORY_CHOSEN = "extra_category_chosen_id";
     private static final String EXTRA_CATEGORY_LIST = "extra_category_list";
 
     private List<ProductCategory> categories;
