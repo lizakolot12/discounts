@@ -3,7 +3,7 @@ package proj.kolot.com.discountatb.main;
 
 import java.util.List;
 
-import proj.kolot.com.discountatb.model.Categories;
+import proj.kolot.com.discountatb.repository.category.Categories;
 import proj.kolot.com.discountatb.model.ProductCategory;
 
 public class CategoriesPresenter {

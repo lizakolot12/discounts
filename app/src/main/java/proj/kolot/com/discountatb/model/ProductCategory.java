@@ -9,7 +9,7 @@ public class ProductCategory implements Parcelable {
     private int value;
     private String description;
 
-    ProductCategory(int value, String description) {
+    public ProductCategory(int value, String description) {
         this.value = value;
         this.description = description;
     }

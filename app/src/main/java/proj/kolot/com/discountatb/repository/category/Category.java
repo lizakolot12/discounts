@@ -1,4 +1,4 @@
-package proj.kolot.com.discountatb.repository.retrofit;
+package proj.kolot.com.discountatb.repository.category;
 
 public enum Category {
     ALL(0, "Все товары"),
