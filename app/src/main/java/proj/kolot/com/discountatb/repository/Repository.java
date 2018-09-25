@@ -10,9 +10,7 @@ public interface Repository {
 
     void getProductByCategory(ProductCategory category, LoadDataCallback listener);
 
-    void updateRepository(ProductCategory category,  List<Product> list);
 
-    void refresh(ProductCategory category, LoadDataCallback listener);
 
     interface LoadDataCallback {
         void onDataReceive(List<Product> list);
@@ -20,3 +18,6 @@ public interface Repository {
         void onError(String error);
     }
 }
+
+
+

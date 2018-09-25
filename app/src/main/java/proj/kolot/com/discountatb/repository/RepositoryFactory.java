@@ -7,7 +7,7 @@ import proj.kolot.com.discountatb.util.AppExecutors;
 
 public class RepositoryFactory {
 
-    public static Repository getLocalRepository(){
+    public static EditableRepository getLocalRepository(){
         return new LocalRepository(AppDatabase.getDatabase(App.getInstance()).productDao(), new AppExecutors());
     }
 

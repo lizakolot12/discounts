@@ -8,7 +8,7 @@ import proj.kolot.com.discountatb.repository.db.ProductDao;
 import proj.kolot.com.discountatb.util.AppExecutors;
 
 
-public class LocalRepository implements Repository {
+public class LocalRepository implements EditableRepository {
 
     private ProductDao productDao;
     private AppExecutors appExecutors;
@@ -22,7 +22,7 @@ public class LocalRepository implements Repository {
 
     @Override
     public void getProductByCategory(final ProductCategory category, final LoadDataCallback callback) {
-         Runnable runnable = new Runnable() {
+        Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 final List<Product> list = productDao.getAllProductsByCategory(category.getValue());
@@ -43,7 +43,8 @@ public class LocalRepository implements Repository {
 
     }
 
-    public void saveByCategory(final ProductCategory category, final List<Product> list) {
+    @Override
+    public void saveData(final ProductCategory category, final List<Product> list, final CompleteCallback completeCallback) {
         Runnable saveRunnable = new Runnable() {
             @Override
             public void run() {
@@ -51,35 +52,32 @@ public class LocalRepository implements Repository {
                     pr.setCategory(category.getValue());
                 }
                 productDao.insert(list);
+                appExecutors.getMainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        completeCallback.onComplete(true);
+                    }
+                });
             }
         };
         appExecutors.getDiskIO().execute(saveRunnable);
     }
 
     @Override
-    public void updateRepository(final ProductCategory category, final List<Product> list) {
-        Runnable saveRunnable = new Runnable() {
+    public void clear(final ProductCategory category, final CompleteCallback completeCallback) {
+        Runnable deleteRunnable = new Runnable() {
             @Override
             public void run() {
                 productDao.deleteByCategory(category.getValue());
-                for (Product pr : list) {
-                    pr.setCategory(category.getValue());
-                }
-                productDao.insert(list);
+                appExecutors.getMainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        completeCallback.onComplete(true);
+                    }
+                });
             }
         };
-        appExecutors.getDiskIO().execute(saveRunnable);
-    }
+        appExecutors.getDiskIO().execute(deleteRunnable);
 
-    @Override
-    public void refresh(final ProductCategory category, final LoadDataCallback listener) {
-        Runnable saveRunnable = new Runnable() {
-            @Override
-            public void run() {
-                productDao.deleteByCategory(category.getValue());
-            }
-        };
-        appExecutors.getDiskIO().execute(saveRunnable);
     }
-
 }

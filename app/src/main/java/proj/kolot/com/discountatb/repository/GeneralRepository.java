@@ -10,13 +10,13 @@ import proj.kolot.com.discountatb.model.Product;
 import proj.kolot.com.discountatb.model.ProductCategory;
 
 
-public class GeneralRepository implements Repository {
+public class GeneralRepository implements EditableRepository {
     private static final String TAG = GeneralRepository.class.getName();
 
-    private Repository localRepository;
+    private EditableRepository localRepository;
     private Repository remoteRepository;
 
-    public GeneralRepository(Repository localRepository, Repository remoteRepository) {
+    public GeneralRepository(EditableRepository localRepository, Repository remoteRepository) {
         this.localRepository = localRepository;
         this.remoteRepository = remoteRepository;
     }
@@ -26,9 +26,9 @@ public class GeneralRepository implements Repository {
 
     @Override
     public void getProductByCategory(final ProductCategory category, final LoadDataCallback listener) {
-             List<Product> result = cache.get(category);
+        List<Product> result = cache.get(category);
         if (result != null) {
-            Log.i(TAG, " get data from cache");
+            Log.e(TAG, " get data from cache");
             listener.onDataReceive(result);
             return;
         }
@@ -36,32 +36,15 @@ public class GeneralRepository implements Repository {
         localRepository.getProductByCategory(category, new LoadDataCallback() {
             @Override
             public void onDataReceive(List<Product> list) {
-                Log.i(TAG, " get data from local storage");
+                Log.e(TAG, " get data from local storage");
                 cache.put(category, list);
                 listener.onDataReceive(list);
             }
 
             @Override
             public void onError(String error) {
-                Log.i(TAG, "get data from internet");
+                Log.e(TAG, "get data from internet");
                 getTasksFromRemoteDataSource(category, listener);
-            }
-        });
-    }
-    @Override
-    public void refresh(final ProductCategory category, final LoadDataCallback listener) {
-        remoteRepository.getProductByCategory(category, new LoadDataCallback() {
-            @Override
-            public void onDataReceive(List<Product>result) {
-                localRepository.updateRepository(category, result);
-                cache.put(category, result);
-                listener.onDataReceive(result);
-            }
-
-            @Override
-            public void onError(String error) {
-                cache = new HashMap<>();
-                listener.onError(error);
             }
         });
     }
@@ -69,10 +52,13 @@ public class GeneralRepository implements Repository {
     private void getTasksFromRemoteDataSource(final ProductCategory category, final LoadDataCallback listener) {
         remoteRepository.getProductByCategory(category, new LoadDataCallback() {
             @Override
-            public void onDataReceive(List<Product> list) {
-                cache.put(category, list);
-                localRepository.updateRepository(category, list);
-                listener.onDataReceive(list);
+            public void onDataReceive(final List<Product> list) {
+                saveData(category, list, new CompleteCallback() {
+                    @Override
+                    public void onComplete(boolean success) {
+                        listener.onDataReceive(list);
+                    }
+                });
             }
 
             @Override
@@ -82,20 +68,17 @@ public class GeneralRepository implements Repository {
         });
     }
 
-    @Override
-    public void updateRepository(final ProductCategory category, List<Product> l) {
-        cache = new HashMap<>();
-        remoteRepository.getProductByCategory(category, new LoadDataCallback() {
-            @Override
-            public void onDataReceive(List<Product> result) {
-                localRepository.updateRepository(category, result);
-                cache.put(category, result);
-            }
 
-            @Override
-            public void onError(String error) {
-                cache = new HashMap<>();
-            }
-        });
+    @Override
+    public void saveData(final ProductCategory category, List<Product> list, CompleteCallback completeCallback) {
+        localRepository.saveData(category, list, completeCallback);
+        cache.put(category, list);
+
+    }
+
+    @Override
+    public void clear(ProductCategory category, CompleteCallback completeCallback) {
+        cache = new HashMap<>();
+        localRepository.clear(category, completeCallback);
     }
 }

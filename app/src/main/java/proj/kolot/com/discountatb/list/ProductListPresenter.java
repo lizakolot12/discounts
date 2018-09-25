@@ -5,17 +5,18 @@ import java.util.List;
 
 import proj.kolot.com.discountatb.model.Product;
 import proj.kolot.com.discountatb.model.ProductCategory;
+import proj.kolot.com.discountatb.repository.EditableRepository;
 import proj.kolot.com.discountatb.repository.Repository;
 
 public class ProductListPresenter {
 
-    private final Repository repository;
+    private final EditableRepository repository;
     private ProductListView productListView;
     private ProductCategory category;
     private boolean loading = false;
     private List<Product> list;
 
-    public ProductListPresenter(ProductListView productListView, Repository repository) {
+    public ProductListPresenter(ProductListView productListView, EditableRepository repository) {
         this.productListView = productListView;
         this.repository = repository;
     }
@@ -28,7 +29,13 @@ public class ProductListPresenter {
     public void update() {
         loading = true;
         list = null;
-        repository.refresh(category, getRepositoryCallback());
+        showLoading();
+        repository.clear(category, new EditableRepository.CompleteCallback() {
+            @Override
+            public void onComplete(boolean success) {
+                repository.getProductByCategory(category, getRepositoryCallback());
+            }
+        });
     }
 
     private Repository.LoadDataCallback getRepositoryCallback() {
@@ -51,12 +58,10 @@ public class ProductListPresenter {
 
     private void showData() {
         if (list == null) {
+            showLoading();
             if (!loading) {
-                showLoading();
                 loading = true;
                 repository.getProductByCategory(category, getRepositoryCallback());
-            } else {
-                showLoading();
             }
         } else {
             showProducts();
